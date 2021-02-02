@@ -1,40 +1,52 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-
-import { Course } from '../model/course';
+import {
+    AfterContentInit,
+    AfterViewInit,
+    Component,
+    ContentChildren,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnInit,
+    Output,
+    QueryList,
+    ViewEncapsulation
+} from '@angular/core';
+import {Course} from '../model/course';
+import {CourseImageComponent} from '../course-image/course-image.component';
 
 @Component({
-  selector: 'course-card',
-  templateUrl: './course-card.component.html',
-  styleUrls: ['./course-card.component.css']
+    selector: 'course-card',
+    templateUrl: './course-card.component.html',
+    styleUrls: ['./course-card.component.css']
 })
 export class CourseCardComponent implements OnInit {
-  @Input()
-  course: Course;
-  @Input()
-  cardIndex: number;
-@Output()
-  courseSelected = new EventEmitter<Course>();
-  constructor() { }
 
-  ngOnInit(): void {
-  }
-  isImageVisible() {
-    return this.course && this.course.iconUrl;
-  }
-  onCourseViewed() {
-    console.log("card component - button clicked")
-    this.courseSelected.emit(this.course);
-  }
-  cardClasses() {
+    @Input()
+    course: Course;
 
-    if (this.course.category == 'BEGINNER') {
-      return 'beginner';
+    @Input()
+    cardIndex: number;
+
+    @Output('courseChanged')
+    courseEmitter = new EventEmitter<Course>();
+
+
+    constructor() {
+
     }
-  }
-  cardStyles() {
-    return {
-      'background-image': 'url(' + this.course.iconUrl + ')'
 
-    };
-  }
+    ngOnInit() {
+
+    }
+
+
+    onSaveClicked(description:string) {
+
+        this.courseEmitter.emit({...this.course, description});
+
+    }
+
+
+
+
 }
